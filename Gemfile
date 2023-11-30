@@ -40,6 +40,7 @@ group :development, :test do
   # See https://guides.rubyonrails.org/debugging_rails_applications.html#debugging-with-the-debug-gem
   gem 'debug', platforms: %i[mri mingw x64_mingw]
   gem 'factory_bot_rails', '~> 6.2'
+  gem 'faker', '~> 1.6', '>= 1.6.6'
   gem 'guard-rspec', '~> 4.7', '>= 4.7.3'
   gem 'rspec-rails', '~> 6.0', '>= 6.0.3'
   gem 'rubocop-rails', '~> 2.22', '>= 2.22.2'
