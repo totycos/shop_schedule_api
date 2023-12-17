@@ -8,7 +8,7 @@ module Api
 
       # GET /api/v1/shops/1/schedules
       def index
-        @api_v1_shop_schedules = Schedule.where(shop_id: params[:shop_id])
+        @api_v1_shop_schedules = Schedule.sorted_schedules(Schedule.where(shop_id: params[:shop_id]))
         render json: @api_v1_shop_schedules
       end
 

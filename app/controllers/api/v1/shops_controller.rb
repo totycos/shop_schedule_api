@@ -8,13 +8,13 @@ module Api
 
       # GET /api/v1/shops
       def index
-        @api_v1_shops = Shop.all.includes(:schedules)
-        render json: @api_v1_shops.as_json(include: :schedules)
+        @api_v1_shops = Shop.all
+        render json: @api_v1_shops
       end
 
       # GET /api/v1/shops/1
       def show
-        render json: @api_v1_shop.as_json(include: :schedules)
+        render json: @api_v1_shop
       end
 
       # POST /api/v1/shops

@@ -2,6 +2,7 @@
 
 # Model representing a shop in the application.
 class Shop < ApplicationRecord
+  include SortByCurrentDay
   has_many :schedules, dependent: :destroy
 
   validates :name, presence: true, uniqueness: { case_sensitive: false }

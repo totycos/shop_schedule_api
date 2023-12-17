@@ -1,4 +1,5 @@
 class Schedule < ApplicationRecord
+  include SortByCurrentDay
   DEFAULT_DATE = Date.new(2000, 1, 1)
   before_validation :format_opening_time, :format_closing_time
   belongs_to :shop
