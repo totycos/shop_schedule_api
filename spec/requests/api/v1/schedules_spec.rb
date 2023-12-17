@@ -23,11 +23,33 @@ RSpec.describe '/api/v1/schedules', type: :request do
       current_day = Time.now.strftime('%A').downcase
       day_names = Schedule.days.keys.map(&:to_s)
       sorted_days = day_names.rotate(day_names.index(current_day))
-      current_day_index = sorted_days.index(current_day)
+      unless json.any? { |schedule| schedule['day'] == current_day }
+        current_day_index = sorted_days.index do |day|
+          json.any? do |schedule|
+            schedule['day'] == day
+          end
+        end
+      end
+      current_day_index = (current_day_index || 0) + 1
+      current_day_index %= sorted_days.size
+
+      expect(current_day_index).not_to be_nil
 
       expect(json[0]['day']).to eq(I18n.t("date.day_names.#{sorted_days[current_day_index].downcase}"))
-      expect(json[0]['opening_time']).to eq(@shop.schedules.find_by(day: sorted_days[current_day_index]).opening_time)
-      expect(json[0]['closing_time']).to eq(@shop.schedules.find_by(day: sorted_days[current_day_index]).closing_time)
+      expect(json[0]['opening_time'].to_datetime).to eq(@shop.schedules.find_by(day: sorted_days[current_day_index]).opening_time)
+      expect(json[0]['closing_time'].to_datetime).to eq(@shop.schedules.find_by(day: sorted_days[current_day_index]).closing_time)
+    end
+
+    it 'Check if the opening_time are sorted properly for a same day' do
+      get api_v1_shop_schedules_url(@shop), as: :json
+      json = JSON.parse(response.body)
+
+      json.each_cons(2) do |schedule1, schedule2|
+        opening_time1 = Time.parse(schedule1['opening_time'])
+        opening_time2 = Time.parse(schedule2['opening_time'])
+
+        expect(opening_time1).to be < opening_time2
+      end
     end
   end
 
@@ -44,8 +66,8 @@ RSpec.describe '/api/v1/schedules', type: :request do
       json = JSON.parse(response.body)
       expect(json['id']).to eq(@shop.schedules.first.id)
       expect(json['day']).to eq(I18n.t("date.day_names.#{@shop.schedules.first.day.downcase}"))
-      expect(json['opening_time']).to eq(@shop.schedules.first.opening_time)
-      expect(json['closing_time']).to eq(@shop.schedules.first.closing_time)
+      expect(json['opening_time'].to_datetime).to eq(@shop.schedules.first.opening_time)
+      expect(json['closing_time'].to_datetime).to eq(@shop.schedules.first.closing_time)
       expect(json.size).to eq(4)
     end
   end

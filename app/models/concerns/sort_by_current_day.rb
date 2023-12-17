@@ -14,7 +14,9 @@ module SortByCurrentDay
       current_day = Time.now.strftime('%A').downcase # downcase to match with enum days
       day_names = Schedule.days.keys.map(&:to_s)
       sorted_days = day_names.rotate(day_names.index(current_day))
-      schedules.sort_by { |schedule| sorted_days.index(schedule.day) }
+      schedules.sort_by do |schedule|
+        [sorted_days.index(schedule.day), schedule.opening_time] # sort by day then by opening_time
+      end
     end
   end
 end

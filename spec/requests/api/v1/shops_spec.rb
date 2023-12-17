@@ -19,9 +19,9 @@ RSpec.describe '/api/v1/shops', type: :request do
       json = JSON.parse(response.body)
       expect(json.size).to eq(2)
       expect(json[0]['name']).to eq(@shop.name)
-      expect(json[0]['schedules'].size).to eq(2)
+      expect(json[0]['sorted_schedules'].size).to eq(2)
       expect(json[1]['name']).to eq(@shop2.name)
-      expect(json[1]['schedules'].size).to eq(0)
+      expect(json[1]['sorted_schedules'].size).to eq(0)
     end
   end
 
@@ -35,7 +35,7 @@ RSpec.describe '/api/v1/shops', type: :request do
       get api_v1_shop_url(@shop), as: :json
       json = JSON.parse(response.body)
       expect(json['name']).to eq(@shop.name)
-      expect(json['schedules'].size).to eq(2)
+      expect(json['sorted_schedules'].size).to eq(2)
     end
   end
 
