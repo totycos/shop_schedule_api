@@ -48,7 +48,9 @@ group :development, :test do
   gem 'faker', '~> 1.6', '>= 1.6.6'
   gem 'guard-rspec', '~> 4.7', '>= 4.7.3'
   gem 'rspec-rails', '~> 6.0', '>= 6.0.3'
+  gem 'rubocop-performance', '~> 1.20'
   gem 'rubocop-rails', '~> 2.22', '>= 2.22.2'
+  gem 'rubocop-rspec', '~> 2.24', '>= 2.24.1'
   gem 'shoulda-matchers', '~> 5.3'
 end
 
