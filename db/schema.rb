@@ -10,22 +10,22 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2023_11_29_224541) do
-  create_table "schedules", force: :cascade do |t|
-    t.string "day"
-    t.integer "shop_id", null: false
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-    t.time "opening_time"
-    t.time "closing_time"
-    t.index ["shop_id"], name: "index_schedules_on_shop_id"
+ActiveRecord::Schema[7.0].define(version: 20_231_129_224_541) do
+  create_table 'schedules', force: :cascade do |t|
+    t.string 'day'
+    t.integer 'shop_id', null: false
+    t.datetime 'created_at', null: false
+    t.datetime 'updated_at', null: false
+    t.time 'opening_time'
+    t.time 'closing_time'
+    t.index ['shop_id'], name: 'index_schedules_on_shop_id'
   end
 
-  create_table "shops", force: :cascade do |t|
-    t.string "name"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
+  create_table 'shops', force: :cascade do |t|
+    t.string 'name'
+    t.datetime 'created_at', null: false
+    t.datetime 'updated_at', null: false
   end
 
-  add_foreign_key "schedules", "shops"
+  add_foreign_key 'schedules', 'shops'
 end
