@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 FactoryBot.define do
   factory :schedule do
     day { %w[Monday Tuesday Wednesday Thursday Friday Saturday Sunday].sample }

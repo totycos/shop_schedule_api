@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class Schedule < ApplicationRecord
   include SortByCurrentDay
   DEFAULT_DATE = Date.new(2000, 1, 1)

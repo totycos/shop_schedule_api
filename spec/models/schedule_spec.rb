@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'rails_helper'
 
 RSpec.describe Schedule, type: :model do
@@ -36,14 +38,14 @@ RSpec.describe Schedule, type: :model do
       schedule = build(:schedule, shop_id: 999)
       expect(schedule).not_to be_valid
       expect(schedule.errors[:shop_id]).to include('Must belong to an existing shop')
-      shop = create(:shop, id: 1)
+      create(:shop, id: 1)
       schedule = build(:schedule, shop_id: 1)
       expect(schedule).to be_valid
     end
 
     it 'validates that opening_time and closing_time are not overlaping with an existing schedule for the same day and shop_id' do
       shop = create(:shop, id: 1)
-      existing_schedule = create(:schedule, day: 'Monday', opening_time: '08:00', closing_time: '12:00', shop_id: 1)
+      create(:schedule, day: 'Monday', opening_time: '08:00', closing_time: '12:00', shop_id: 1)
 
       # Test avec un opening_time qui se chevauche
       overlapping_schedule = build(:schedule, day: 'Monday', opening_time: '10:00', closing_time: '14:00', shop: shop)
