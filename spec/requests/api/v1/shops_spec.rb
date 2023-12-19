@@ -3,7 +3,7 @@
 require 'rails_helper'
 
 RSpec.describe '/api/v1/shops', type: :request do
-  before(:each) do
+  before do
     @shop = create(:shop, id: 1)
     @shop2 = create(:shop, id: 2)
     @schedule = create(:schedule, day: 'Monday', opening_time: '08:00', closing_time: '12:00', shop: @shop)

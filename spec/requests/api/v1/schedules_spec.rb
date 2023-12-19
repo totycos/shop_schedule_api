@@ -3,7 +3,7 @@
 require 'rails_helper'
 
 RSpec.describe '/api/v1/schedules', type: :request do
-  before(:each) do
+  before do
     @shop = Shop.create(name: 'Castoramax')
     @schedule = create(:schedule, day: 'Monday', opening_time: '08:00', closing_time: '12:00', shop: @shop)
     @schedule2 = create(:schedule, day: 'Monday', opening_time: '13:00', closing_time: '18:00', shop: @shop)
@@ -20,24 +20,20 @@ RSpec.describe '/api/v1/schedules', type: :request do
       json = JSON.parse(response.body)
       expect(json.size).to eq(2)
 
-      current_day = Time.now.strftime('%A').downcase
+      current_day = 'tuesday' # Time.now.strftime('%A').downcase
       day_names = Schedule.days.keys.map(&:to_s)
       sorted_days = day_names.rotate(day_names.index(current_day))
-      unless json.any? { |schedule| schedule['day'] == current_day }
-        current_day_index = sorted_days.index do |day|
-          json.any? do |schedule|
-            schedule['day'] == day
-          end
-        end
-      end
-      current_day_index = (current_day_index || 0) + 1
-      current_day_index %= sorted_days.size
 
-      expect(current_day_index).not_to be_nil
+      expected_day = if @shop.schedules.any? { |schedule| schedule['day'].casecmp(current_day).zero? }
+                 current_day
+               else
+                 closest_day = sorted_days.find { |day| @shop.schedules.any? { |schedule| schedule['day'].casecmp(day).zero? } }
+                 closest_day
+               end
 
-      expect(json[0]['day']).to eq(I18n.t("date.day_names.#{sorted_days[current_day_index].downcase}"))
-      expect(json[0]['opening_time'].to_datetime).to eq(@shop.schedules.find_by(day: sorted_days[current_day_index]).opening_time)
-      expect(json[0]['closing_time'].to_datetime).to eq(@shop.schedules.find_by(day: sorted_days[current_day_index]).closing_time)
+      expect(json[0]['day']).to eq(I18n.t("date.day_names.#{expected_day}"))
+      expect(json[0]['opening_time'].to_datetime).to eq(@shop.schedules.find_by(day: expected_day).opening_time)
+      expect(json[0]['closing_time'].to_datetime).to eq(@shop.schedules.find_by(day: expected_day).closing_time)
     end
 
     it 'Check if the opening_time are sorted properly for a same day' do

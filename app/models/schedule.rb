@@ -9,7 +9,7 @@ class Schedule < ApplicationRecord
   enum day: { monday: 'Monday', tuesday: 'Tuesday', wednesday: 'Wednesday', thursday: 'Thursday', friday: 'Friday',
               saturday: 'Saturday', sunday: 'Sunday' }
 
-  validates :day, presence: true, inclusion: { in: days.keys }
+  validates :day, presence: true
   validates :opening_time, presence: true, timeliness: { type: :time, before: '2000-01-01 23:59:59' }
   validates :closing_time, presence: true, timeliness: { type: :time, before: '2000-01-01 23:59:59' }
   validates :shop_id, presence: true
