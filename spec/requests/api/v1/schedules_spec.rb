@@ -25,11 +25,15 @@ RSpec.describe '/api/v1/schedules', type: :request do
       sorted_days = day_names.rotate(day_names.index(current_day))
 
       expected_day = if @shop.schedules.any? { |schedule| schedule['day'].casecmp(current_day).zero? }
-                 current_day
-               else
-                 closest_day = sorted_days.find { |day| @shop.schedules.any? { |schedule| schedule['day'].casecmp(day).zero? } }
-                 closest_day
-               end
+                       current_day
+                     else
+                       closest_day = sorted_days.find do |day|
+                         @shop.schedules.any? do |schedule|
+                           schedule['day'].casecmp(day).zero?
+                         end
+                       end
+                       closest_day
+                     end
 
       expect(json[0]['day']).to eq(I18n.t("date.day_names.#{expected_day}"))
       expect(json[0]['opening_time'].to_datetime).to eq(@shop.schedules.find_by(day: expected_day).opening_time)

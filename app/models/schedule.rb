@@ -1,5 +1,6 @@
 # frozen_string_literal: true
 
+# Define Schedule model
 class Schedule < ApplicationRecord
   include SortByCurrentDay
   DEFAULT_DATE = Date.new(2000, 1, 1)
@@ -19,8 +20,6 @@ class Schedule < ApplicationRecord
   validate :no_overlapping_schedules
   validate :shop_exists
 
-  private
-
   def format_opening_time
     format_time_attribute(:opening_time)
   end
@@ -28,6 +27,8 @@ class Schedule < ApplicationRecord
   def format_closing_time
     format_time_attribute(:closing_time)
   end
+
+  private
 
   def format_time_attribute(attribute)
     attribute_value = send(attribute)

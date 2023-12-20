@@ -12,49 +12,56 @@ RSpec.describe Schedule, type: :model do
     it { is_expected.to validate_presence_of(:opening_time) }
     it { is_expected.to validate_presence_of(:closing_time) }
 
-    it 'validates the format of opening_time' do
-      expect(schedule).to allow_value('08:00').for(:opening_time)
-      expect(schedule).not_to allow_value('invalid_format').for(:opening_time)
-      expect(schedule).not_to allow_value('45:05').for(:opening_time)
-      expect(schedule).not_to allow_value('12:75').for(:opening_time)
+    it { is_expected.to allow_value('08:00').for(:opening_time) }
+    it { is_expected.not_to allow_value('invalid_format').for(:opening_time) }
+    it { is_expected.not_to allow_value('45:05').for(:opening_time) }
+    it { is_expected.not_to allow_value('12:75').for(:opening_time) }
+
+    it { is_expected.to allow_value('12:00').for(:closing_time) }
+    it { is_expected.not_to allow_value('invalid_format').for(:closing_time) }
+    it { is_expected.not_to allow_value('45:05').for(:closing_time) }
+    it { is_expected.not_to allow_value('12:75').for(:closing_time) }
+
+    context 'when opening_time is later than closing_time' do
+      let(:schedule) { build(:schedule, opening_time: '08:00', closing_time: '07:00') }
+
+      it 'is not valid' do
+        expect(schedule).not_to be_valid
+      end
     end
 
-    it 'validates the format of closing_time' do
-      expect(schedule).to allow_value('18:00').for(:closing_time)
-      expect(schedule).not_to allow_value('invalid_format').for(:closing_time)
-      expect(schedule).not_to allow_value('45:05').for(:closing_time)
-      expect(schedule).not_to allow_value('12:75').for(:closing_time)
+    context 'when shop_id does not belong to an existing shop' do
+      let(:schedule) { build(:schedule, shop_id: 999) }
+
+      it 'is not valid' do # rubocop:disable RSpec/MultipleExpectations
+        expect(schedule).not_to be_valid
+        expect(schedule.errors[:shop_id]).to include('Must belong to an existing shop')
+      end
     end
 
-    it 'validates that opening_time is before closing_time' do
-      schedule.opening_time = '08:00'
-      schedule.closing_time = '07:00'
+    context 'when shop_id belongs to an existing shop' do
+      before { create(:shop, id: 1) }
 
-      expect(schedule).not_to be_valid
+      let(:schedule) { build(:schedule, shop_id: 1) }
+
+      it { is_expected.to be_valid }
     end
 
-    it 'validates that shop_id is associated with an existing shop' do
-      schedule = build(:schedule, shop_id: 999)
-      expect(schedule).not_to be_valid
-      expect(schedule.errors[:shop_id]).to include('Must belong to an existing shop')
-      create(:shop, id: 1)
-      schedule = build(:schedule, shop_id: 1)
-      expect(schedule).to be_valid
-    end
+    context 'when opening_time and closing_time overlap with an existing schedule for the same day and shop_id' do
+      let(:shop) { create(:shop, id: 1) }
+      let(:overlapping_schedule) { build(:schedule, day: 'Monday', opening_time: '10:00', closing_time: '14:00', shop: shop) }
+      let(:non_overlapping_schedule) { build(:schedule, day: 'Monday', opening_time: '14:00', closing_time: '18:00', shop: shop) }
 
-    it 'validates that opening_time and closing_time are not overlaping with an existing schedule for the same day and shop_id' do
-      shop = create(:shop, id: 1)
-      create(:schedule, day: 'Monday', opening_time: '08:00', closing_time: '12:00', shop_id: 1)
+      it 'has at least 1 error on :opening_time with message "overlaps with an existing schedule"' do # rubocop:disable RSpec/MultipleExpectations
+        create(:schedule, day: 'Monday', opening_time: '08:00', closing_time: '12:00', shop: shop)
 
-      # Test avec un opening_time qui se chevauche
-      overlapping_schedule = build(:schedule, day: 'Monday', opening_time: '10:00', closing_time: '14:00', shop: shop)
-      expect(overlapping_schedule).not_to be_valid
-      expect(overlapping_schedule.errors[:opening_time]).to include('overlaps with an existing schedule')
+        expect(overlapping_schedule).not_to be_valid
+        expect(overlapping_schedule.errors[:opening_time]).to include('overlaps with an existing schedule')
+      end
 
-      # Test avec un opening_time qui ne se chevauche pas
-      non_overlapping_schedule = build(:schedule, day: 'Monday', opening_time: '14:00', closing_time: '18:00',
-                                                  shop: shop)
-      expect(non_overlapping_schedule).to be_valid
+      it 'is valid for non_overlapping_schedule' do
+        expect(non_overlapping_schedule).to be_valid
+      end
     end
   end
 

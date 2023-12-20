@@ -9,6 +9,7 @@ require 'rails/all'
 Bundler.require(*Rails.groups)
 
 module ShopScheduleApi
+  # Define Application config for ShopScheduleApi
   class Application < Rails::Application
     # Initialize configuration defaults for originally generated Rails version.
     config.load_defaults 7.0
@@ -26,6 +27,7 @@ module ShopScheduleApi
     # Skip views, helpers and assets when generating a new resource.
     config.api_only = true
 
-    config.i18n.default_locale = :fr
+    config.i18n.available_locales = [:en, :fr] # Add other locales if needed
+    config.i18n.default_locale = :en # Set your default locale
   end
 end
