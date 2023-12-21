@@ -46,14 +46,19 @@ class Schedule < ApplicationRecord
   def no_overlapping_schedules
     return unless shop_id.present? && day.present? && opening_time.present? && closing_time.present?
 
-    existing_schedules = Schedule.where(shop_id: shop_id, day: day).where.not(id: id)
+    existing_schedules = find_existing_schedules
 
-    if existing_schedules.any? do |schedule|
-         overlap?(opening_time, closing_time, schedule.opening_time, schedule.closing_time)
-       end
-      errors.add(:opening_time, 'overlaps with an existing schedule')
-      errors.add(:closing_time, 'overlaps with an existing schedule')
-    end
+    return unless overlapping_schedules?(existing_schedules)
+
+    add_overlap_errors
+  end
+
+  def find_existing_schedules
+    Schedule.where(shop_id: shop_id, day: day).where.not(id: id)
+  end
+
+  def overlapping_schedules?(schedules)
+    schedules.any? { |schedule| overlap?(opening_time, closing_time, schedule.opening_time, schedule.closing_time) }
   end
 
   def overlap?(start_time1, end_time1, start_time2, end_time2)
@@ -61,6 +66,11 @@ class Schedule < ApplicationRecord
     range2 = (start_time2.to_i...end_time2.to_i)
 
     range1.overlaps?(range2)
+  end
+
+  def add_overlap_errors
+    errors.add(:opening_time, 'overlaps with an existing schedule')
+    errors.add(:closing_time, 'overlaps with an existing schedule')
   end
 
   def shop_exists

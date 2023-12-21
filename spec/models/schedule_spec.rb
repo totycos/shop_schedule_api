@@ -49,8 +49,12 @@ RSpec.describe Schedule, type: :model do
 
     context 'when opening_time and closing_time overlap with an existing schedule for the same day and shop_id' do
       let(:shop) { create(:shop, id: 1) }
-      let(:overlapping_schedule) { build(:schedule, day: 'Monday', opening_time: '10:00', closing_time: '14:00', shop: shop) }
-      let(:non_overlapping_schedule) { build(:schedule, day: 'Monday', opening_time: '14:00', closing_time: '18:00', shop: shop) }
+      let(:overlapping_schedule) do
+        build(:schedule, day: 'Monday', opening_time: '10:00', closing_time: '14:00', shop: shop)
+      end
+      let(:non_overlapping_schedule) do
+        build(:schedule, day: 'Monday', opening_time: '14:00', closing_time: '18:00', shop: shop)
+      end
 
       it 'has at least 1 error on :opening_time with message "overlaps with an existing schedule"' do # rubocop:disable RSpec/MultipleExpectations
         create(:schedule, day: 'Monday', opening_time: '08:00', closing_time: '12:00', shop: shop)

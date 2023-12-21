@@ -27,7 +27,7 @@ module ShopScheduleApi
     # Skip views, helpers and assets when generating a new resource.
     config.api_only = true
 
-    config.i18n.available_locales = [:en, :fr] # Add other locales if needed
+    config.i18n.available_locales = %i[en fr] # Add other locales if needed
     config.i18n.default_locale = :en # Set your default locale
   end
 end
