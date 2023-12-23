@@ -11,8 +11,8 @@ RSpec.describe '/api/v1/shops', type: :request do
 
     it 'returns all shops with associated schedules' do # rubocop:disable RSpec/ExampleLength,RSpec/MultipleExpectations
       shop = create(:shop)
-      create(:schedule, shop: shop)
-      create(:schedule, shop: shop)
+      create(:schedule, day: 'Monday', opening_time: '08:00', closing_time: '12:00', shop: shop)
+      create(:schedule, day: 'Monday', opening_time: '14:00', closing_time: '19:00', shop: shop)
       shop2 = create(:shop)
 
       get api_v1_shops_url, as: :json
@@ -35,8 +35,8 @@ RSpec.describe '/api/v1/shops', type: :request do
 
     it 'returns the shop with associated schedules' do # rubocop:disable RSpec/ExampleLength,RSpec/MultipleExpectations
       shop = create(:shop)
-      create(:schedule, shop: shop)
-      create(:schedule, shop: shop)
+      create(:schedule, day: 'Monday', opening_time: '08:00', closing_time: '12:00', shop: shop)
+      create(:schedule, day: 'Monday', opening_time: '14:00', closing_time: '19:00', shop: shop)
 
       get api_v1_shop_url(shop), as: :json
       json = JSON.parse(response.body)
@@ -129,8 +129,8 @@ RSpec.describe '/api/v1/shops', type: :request do
 
     it 'destroys associated schedules' do
       shop = create(:shop)
-      create(:schedule, shop: shop)
-      create(:schedule, shop: shop)
+      create(:schedule, day: 'Monday', opening_time: '08:00', closing_time: '12:00', shop: shop)
+      create(:schedule, day: 'Monday', opening_time: '14:00', closing_time: '19:00', shop: shop)
 
       expect { delete api_v1_shop_url(shop), as: :json }.to change(Schedule, :count).by(-2)
     end
