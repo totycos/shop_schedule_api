@@ -43,10 +43,12 @@ gem 'validates_timeliness', '~> 7.0.0.beta1'
 
 group :development, :test do
   # See https://guides.rubyonrails.org/debugging_rails_applications.html#debugging-with-the-debug-gem
+  gem 'brakeman', '~> 6.1'
   gem 'debug', platforms: %i[mri mingw x64_mingw]
   gem 'factory_bot_rails', '~> 6.2'
   gem 'faker', '~> 1.6', '>= 1.6.6'
   gem 'guard-rspec', '~> 4.7', '>= 4.7.3'
+  gem 'rails_best_practices', '~> 1.23', '>= 1.23.2'
   gem 'rspec-rails', '~> 6.0', '>= 6.0.3'
   gem 'rubocop-factory_bot', '~> 2.22', require: false
   gem 'rubocop-i18n', '~> 3.0', require: false
@@ -60,4 +62,6 @@ group :development do
   # Speed up commands on slow machines / big apps [https://github.com/rails/spring]
   # gem "spring"
   gem 'bundle-audit', '~> 0.1.0'
+  gem 'database_consistency', '~> 1.7', '>= 1.7.22', require: false
+  gem "rubycritic", require: false
 end
