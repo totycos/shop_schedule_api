@@ -9,5 +9,19 @@
 #
 # See https://docs.rubocop.org/rubocop/configuration
 
-require: rubocop-performance
-require: rubocop-rspec
+require: 
+  - rubocop-performance
+  - rubocop-rspec
+  - rubocop-factory_bot
+  - rubocop-i18n
+
+AllCops:
+  Exclude:
+    - 'config/**/*' # Exclut tous les fichiers dans le répertoire 'config'
+    - 'db/schema.rb' # Exclut le fichier de schéma de base de données
+    - 'vendor/**/*' # Exclut tous les fichiers dans le répertoire 'vendor'
+    - 'bin/**/*'
+    - Guardfile
+
+Security/Eval:  
+  Enabled: true

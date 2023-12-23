@@ -46,8 +46,10 @@ RSpec.describe '/api/v1/schedules', type: :request do
     end
 
     it 'returns full ordered schedule ' do # rubocop:disable RSpec/MultipleExpectations
+      day_key = "date.day_names.#{expected_day(shop)}"
+
       expect(json.size).to eq(2)
-      expect(json[0]['day']).to eq(I18n.t("date.day_names.#{expected_day(shop)}"))
+      expect(json[0]['day']).to eq(I18n.t(day_key))
       expect(json[0]['opening_time'].to_datetime).to eq(shop.schedules.find_by(day: expected_day(shop)).opening_time)
       expect(json[0]['closing_time'].to_datetime).to eq(shop.schedules.find_by(day: expected_day(shop)).closing_time)
     end
@@ -72,8 +74,9 @@ RSpec.describe '/api/v1/schedules', type: :request do
     end
 
     it 'returns schedule for a day' do # rubocop:disable RSpec/MultipleExpectations
+      day_key = "date.day_names.#{shop.schedules.first.day.downcase}"
       expect(json['id']).to eq(shop.schedules.first.id)
-      expect(json['day']).to eq(I18n.t("date.day_names.#{shop.schedules.first.day.downcase}"))
+      expect(json['day']).to eq(I18n.t(day_key))
       expect(json['opening_time'].to_datetime).to eq(shop.schedules.first.opening_time)
       expect(json['closing_time'].to_datetime).to eq(shop.schedules.first.closing_time)
       expect(json.size).to eq(4)

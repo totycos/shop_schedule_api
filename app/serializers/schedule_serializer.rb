@@ -9,6 +9,7 @@ class ScheduleSerializer < ActiveModel::Serializer
   end
 
   def translate_day(day)
-    I18n.t("date.day_names.#{day.downcase}")
+    day_key = "date.day_names.#{day.downcase}"
+    I18n.t(day_key)
   end
 end
