@@ -61,17 +61,17 @@ for managing shops and their schedules.
 Request body:
 ```json 
 {  
-  "api_v1_shop": {  
-    "name": "ShopName"  
-  }  
+  "api_v1_shop": {
+    "name": "ShopName"
+  }
 }
 ```
 
 Response body:
 ```json 
 {  
-  "id": 1,  
-  "name": "ShopName",  
+  "id": 1,
+  "name": "ShopName",
   "sorted_schedules": []
 }
 ```
@@ -82,17 +82,17 @@ Response body:
 Request body:
 ```json 
 {  
-  "api_v1_shop": {  
-    "name": "UpdatedShopName"  
-  }  
+  "api_v1_shop": {
+    "name": "UpdatedShopName"
+  }
 }
 ```
 
 Response body:
 ```json
 {  
-  "id": 1,  
-  "name": "UpdatedShopName",   
+  "id": 1,
+  "name": "UpdatedShopName",
   "sorted_schedules": []
 }
 ```
