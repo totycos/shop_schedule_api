@@ -137,7 +137,7 @@ Response body:
 {
   "day": "Wednesday",
   "opening_time": "2000-01-01T14:30:00.000Z",
-    "closing_time": "2000-01-01T16:00:00.000Z"
+  "closing_time": "2000-01-01T16:00:00.000Z"
 }
 ```
 
