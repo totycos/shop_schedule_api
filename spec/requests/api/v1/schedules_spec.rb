@@ -73,7 +73,7 @@ RSpec.describe '/api/v1/schedules', type: :request do
       expect(response).to have_http_status(:success)
     end
 
-    it 'returns schedule for a day' do # rubocop:disable RSpec/MultipleExpectations
+    it 'returns schedule for a day' do # rubocop:disable RSpec/MultipleExpectations,RSpec/ExampleLength
       day_key = "date.day_names.#{shop.schedules.first.day.downcase}"
       expect(json['id']).to eq(shop.schedules.first.id)
       expect(json['day']).to eq(I18n.t(day_key))

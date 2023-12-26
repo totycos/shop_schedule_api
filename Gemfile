@@ -63,5 +63,5 @@ group :development do
   # gem "spring"
   gem 'bundle-audit', '~> 0.1.0'
   gem 'database_consistency', '~> 1.7', '>= 1.7.22', require: false
-  gem "rubycritic", require: false
+  gem 'rubycritic', require: false
 end
